@@ -1,0 +1,54 @@
+{
+    "name": "pg_text_semver",
+    "tags": [
+        "domain",
+        "function",
+        "functions",
+        "plpgsql",
+        "semver",
+        "settings",
+        "type"
+    ],
+    "license": "postgresql",
+    "prereqs": {
+        "test": {
+            "requires": {
+                "pgtap": 0
+            }
+        },
+        "develop": {
+            "recommends": {
+                "pg_readme": 0
+            }
+        }
+    },
+    "version": "0.1.0",
+    "abstract": "PostgreSQL semantic versioning extension, with comparison functions and operators.",
+    "provides": {
+        "pg_safer_settings": {
+            "file": "pg_text_semver--0.1.0.sql",
+            "docfile": "README.md",
+            "version": "0.1.0"
+        }
+    },
+    "meta-spec": {
+        "url": "https://pgxn.org/spec/",
+        "version": "1.0.0"
+    },
+    "resources": {
+        "homepage": "https://blog.bigsmoke.us/tag/pg_text_semver",
+        "bugtracker": {
+            "web": "https://github.com/bigsmoke/pg_text_semver/issues"
+        },
+        "repository": {
+            "url": "https://github.com/bigsmoke/pg_text_semver.git",
+            "web": "https://github.com/bigsmoke/pg_text_semver",
+            "type": "git"
+        }
+    },
+    "maintainer": [
+        "Rowan Rodrik van der Molen <rowan@bigsmoke.us>"
+    ],
+    "description": "The pg_text_semver extension offers a \"semver\" DOMAIN type based on Postgres' built-in \"text\" type.",
+    "generated_by": "`select pg_text_semver_meta_pgxn()`"
+}
