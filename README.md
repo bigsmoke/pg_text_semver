@@ -1,14 +1,17 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 0.1.0
-pg_readme_generated_at: 2023-03-02 23:49:02.585475+00
+pg_extension_version: 0.1.1
+pg_readme_generated_at: 2023-03-03 00:10:19.203593+00
 pg_readme_version: 0.6.0
 ---
 
 # PostgreSQL semantic versioning extension: `pg_text_semver`
 
+[![PGXN version](https://badge.fury.io/pg/pg_text_semver.svg)](https://badge.fury.io/pg/pg_text_semver)
+
 The `pg_text_semver` extension offers a `semver` `DOMAIN` type based on
-Postgres' built-in `text` type.
+Postgres' built-in `text` type that implements the [Semantic Versioning 2.0.0
+Specification](https://semver.org/spec/v2.0.0.html).
 
 See the [`test__pg_text_semver()`](#procedure-test__pg_text_semver) procedure
 for examples of how to use the types, operators and functions provides by this
