@@ -7,8 +7,11 @@ comment on extension pg_text_semver is
 $markdown$
 # PostgreSQL semantic versioning extension: `pg_text_semver`
 
+[![PGXN version](https://badge.fury.io/pg/pg_text_semver.svg)](https://badge.fury.io/pg/pg_text_semver)
+
 The `pg_text_semver` extension offers a `semver` `DOMAIN` type based on
-Postgres' built-in `text` type.
+Postgres' built-in `text` type that implements the [Semantic Versioning 2.0.0
+Specification](https://semver.org/spec/v2.0.0.html).
 
 See the [`test__pg_text_semver()`](#procedure-test__pg_text_semver) procedure
 for examples of how to use the types, operators and functions provides by this
@@ -41,7 +44,7 @@ create or replace function pg_text_semver_readme()
 declare
     _readme text;
 begin
-    create extension if not exists pg_readme;
+    create extension if not exists pg_readme cascade;
 
     _readme := pg_extension_readme('pg_text_semver'::name);
 
@@ -93,7 +96,7 @@ create or replace function pg_text_semver_meta_pgxn()
         ,'provides'
         ,('{
             "pg_safer_settings": {
-                "file": "pg_text_semver--0.1.0.sql",
+                "file": "pg_text_semver--0.1.2.sql",
                 "version": "' || (select extversion from pg_extension where extname = 'pg_text_semver') || '",
                 "docfile": "README.md"
             }

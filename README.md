@@ -1,8 +1,8 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 0.1.1
-pg_readme_generated_at: 2023-03-03 00:10:19.203593+00
-pg_readme_version: 0.6.0
+pg_extension_version: 0.1.2
+pg_readme_generated_at: 2023-04-30 22:00:55.282082+01
+pg_readme_version: 0.6.1
 ---
 
 # PostgreSQL semantic versioning extension: `pg_text_semver`
