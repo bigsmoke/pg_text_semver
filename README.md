@@ -1,8 +1,8 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 0.1.2
-pg_readme_generated_at: 2023-04-30 22:00:55.282082+01
-pg_readme_version: 0.6.1
+pg_extension_version: 0.1.3
+pg_readme_generated_at: 2023-05-13 16:02:17.757881+01
+pg_readme_version: 0.6.3
 ---
 
 # PostgreSQL semantic versioning extension: `pg_text_semver`
@@ -232,6 +232,22 @@ CREATE TYPE semver_parsed AS (
   build text
 );
 ```
+
+## Authors and contributors
+
+* [Rowan](https://www.bigsmoke.us/) originated this extension in 2022 while
+  developing the PostgreSQL backend for the [FlashMQ SaaS MQTT cloud
+  broker](https://www.flashmq.com/).  Rowan does not like to see himself as a
+  tech person or a tech writer, but, much to his chagrin, [he
+  _is_](https://blog.bigsmoke.us/category/technology). Some of his chagrin
+  about his disdain for the IT industry he poured into a book: [_Why
+  Programming Still Sucks_](https://www.whyprogrammingstillsucks.com/).  Much
+  more than a “tech bro”, he identifies as a garden gnome, fairy and ork rolled
+  into one, and his passion is really to [regreen and reenchant his
+  environment](https://sapienshabitat.com/).  One of his proudest achievements
+  is to be the third generation ecological gardener to grow the wild garden
+  around his beautiful [family holiday home in the forest of Norg, Drenthe,
+  the Netherlands](https://www.schuilplaats-norg.nl/) (available for rent!).
 
 ## Colophon
 
