@@ -1,7 +1,7 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 0.1.3
-pg_readme_generated_at: 2023-05-13 16:02:17.757881+01
+pg_extension_version: 0.1.4
+pg_readme_generated_at: 2023-05-14 22:46:23.639191+01
 pg_readme_version: 0.6.3
 ---
 
@@ -25,6 +25,12 @@ in C and therefore more efficient than `pg_text_semver`.  But, as of March 2,
 2023, [it treats the parts of the semantic version as 32-bit
 integers](https://github.com/theory/pg-semver/issues/47), while the spec
 prescribes no limitations to the size of each number.
+
+Besides [`semver`](https://github.com/theory/pg-semver) (repo name `pg-semver`,
+with a dash), there is also the older [PG
+SEMVER](https://github.com/eendroroy/pg_semver) (repo name `pg_semver`, with an
+underscore).  The `pg_text_semver` author only discovered PG SEMVER _after_
+releasing his own extension, and hasn't tried it; something left to do…
 
 ## Object reference
 

@@ -1,12 +1,16 @@
 \set ECHO none
 NOTICE:  CREATE EXTENSION pg_text_semver WITH VERSION '0.1.2' CASCADE
-NOTICE:  ALTER EXTENSION pg_text_semver UPDATE TO '0.1.3'
+NOTICE:  ALTER EXTENSION pg_text_semver UPDATE TO '0.1.4'
 NOTICE:  CALL test__pg_text_semver()
 NOTICE:  DROP EXTENSION pg_text_semver CASCADE
 NOTICE:  CREATE EXTENSION pg_text_semver WITH VERSION '0.1.0' CASCADE
-NOTICE:  ALTER EXTENSION pg_text_semver UPDATE TO '0.1.3'
+NOTICE:  ALTER EXTENSION pg_text_semver UPDATE TO '0.1.4'
 NOTICE:  CALL test__pg_text_semver()
 NOTICE:  DROP EXTENSION pg_text_semver CASCADE
 NOTICE:  CREATE EXTENSION pg_text_semver WITH VERSION '0.1.3' CASCADE
+NOTICE:  ALTER EXTENSION pg_text_semver UPDATE TO '0.1.4'
+NOTICE:  CALL test__pg_text_semver()
+NOTICE:  DROP EXTENSION pg_text_semver CASCADE
+NOTICE:  CREATE EXTENSION pg_text_semver WITH VERSION '0.1.4' CASCADE
 NOTICE:  CALL test__pg_text_semver()
 NOTICE:  DROP EXTENSION pg_text_semver CASCADE
