@@ -22,13 +22,13 @@
             }
         }
     },
-    "version": "0.1.4",
+    "version": "0.1.5",
     "abstract": "PostgreSQL semantic versioning extension, with comparison functions and operators.",
     "provides": {
         "pg_safer_settings": {
-            "file": "pg_text_semver--0.1.4.sql",
+            "file": "pg_text_semver--0.1.5.sql",
             "docfile": "README.md",
-            "version": "0.1.4"
+            "version": "0.1.5"
         }
     },
     "meta-spec": {
