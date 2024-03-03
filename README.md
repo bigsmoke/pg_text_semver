@@ -1,7 +1,7 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 1.0.0
-pg_readme_generated_at: 2024-03-03 15:24:13.377143+00
+pg_extension_version: 1.1.0
+pg_readme_generated_at: 2024-03-03 17:19:04.658815+00
 pg_readme_version: 0.6.6
 ---
 
@@ -78,6 +78,30 @@ releasing his own extension, and hasn't tried it; something left to do…
 ## Object reference
 
 ### Routines
+
+#### Function: `max (semver)`
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `semver`                                                             |  |
+
+Function return type: `semver`
+
+Function attributes: `IMMUTABLE`, COST 1
+
+#### Function: `min (semver)`
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `semver`                                                             |  |
+
+Function return type: `semver`
+
+Function attributes: `IMMUTABLE`, COST 1
 
 #### Function: `pg_text_semver_meta_pgxn()`
 
@@ -191,6 +215,19 @@ Function return type: `boolean`
 
 Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`
 
+#### Function: `semver_greatest (semver, semver)`
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `semver`                                                             |  |
+|   `$2` |       `IN` |                                                                   | `semver`                                                             |  |
+
+Function return type: `semver`
+
+Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`
+
 #### Function: `semver_gt (semver_parsed, semver_parsed)`
 
 Function arguments:
@@ -214,6 +251,19 @@ Function arguments:
 |   `$2` |       `IN` |                                                                   | `semver`                                                             |  |
 
 Function return type: `boolean`
+
+Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`
+
+#### Function: `semver_least (semver, semver)`
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `semver`                                                             |  |
+|   `$2` |       `IN` |                                                                   | `semver`                                                             |  |
+
+Function return type: `semver`
 
 Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`
 
@@ -569,6 +619,22 @@ begin
         create index on shuffled ((v::semver_parsed));
         _resorted := (select array_agg(v order by v::semver_parsed) from shuffled);
         assert _resorted = _presorted, format('%s ≠ %s', _resorted, _presorted);
+    end;
+
+    declare
+        _shuffled text[] := array[
+            '0.0.88'
+            ,'1.0.0+stuff'
+            ,'1.0.0'
+            ,'1.0.0-a'
+            ,'0.0.88+stuff'
+            ,'0.0.88-alpha-2-a'
+            ,'1.0.0-a.123'
+        ];
+    begin
+        -- `min(semver)` and `max(semver)` are also possible:
+        assert (select min(v::semver) from unnest(_shuffled) as v)::text = '0.0.88-alpha-2-a';
+        assert (select max(v::semver) from unnest(_shuffled) as v)::text in ('1.0.0', '1.0.0+stuff');
     end;
 
     perform null::semver;
