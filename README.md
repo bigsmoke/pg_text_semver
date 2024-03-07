@@ -1,7 +1,7 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 1.2.0
-pg_readme_generated_at: 2024-03-07 15:49:02.462683+00
+pg_extension_version: 1.2.1
+pg_readme_generated_at: 2024-03-07 16:00:03.584073+00
 pg_readme_version: 0.6.6
 ---
 
@@ -174,8 +174,8 @@ The `Makefile` includes a recipe to allow the developer to: `make META.json` to
 refresh the meta file with the function's current output, including the
 `default_version`.
 
-And indeed, `pg_safer_settings` can be found on PGXN:
-https://pgxn.org/dist/pg_safer_settings/
+And indeed, `pg_text_semver` can be found on PGXN:
+https://pgxn.org/dist/pg_text_semver/
 
 Function return type: `jsonb`
 
