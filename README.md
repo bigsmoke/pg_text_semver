@@ -1,7 +1,7 @@
 ---
 pg_extension_name: pg_text_semver
-pg_extension_version: 1.1.0
-pg_readme_generated_at: 2024-03-03 17:19:04.658815+00
+pg_extension_version: 1.2.0
+pg_readme_generated_at: 2024-03-07 15:49:02.462683+00
 pg_readme_version: 0.6.6
 ---
 
@@ -91,6 +91,49 @@ Function return type: `semver`
 
 Function attributes: `IMMUTABLE`, COST 1
 
+#### Function: `meta_pgxn_version_range_cmp (text, text)`
+
+Use this function if you want to check a version (semantic or otherwise) against a PGXN `META.json` Version Ranges.
+
+This function takes 2 arguments:
+
+1. a [Version Ranges](https://pgxn.org/spec/#Version.Ranges) string confirmed to
+   PGXN's `META.json` spec; and
+2. a version string to tests against the Version Ranges;
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `text`                                                               |  |
+|   `$2` |       `IN` |                                                                   | `text`                                                               |  |
+
+Function return type: `boolean`
+
+Function attributes: `IMMUTABLE`, `LEAKPROOF`, `RETURNS NULL ON NULL INPUT`, `PARALLEL SAFE`
+
+#### Function: `meta_pgxn_version_range (text)`
+
+Returns a row for each element from a _Version Ranges_ value that adheres to the PGXN `META.json` spec.
+
+When dealing with [version ranges](https://pgxn.org/spec/#Version.Ranges) from
+a PGXN `META.json` file, it may be convenient to parse these out so that the
+constraints can then, for example be fed into [`semver_cmp(semver, semver,
+text)`](#function-semver_cmp-semver-semver-text).
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` | ``                                                                | `text`                                                               |  |
+|   `$2` |    `TABLE` | `version_range_op`                                                | `text`                                                               |  |
+|   `$3` |    `TABLE` | `version_no`                                                      | `text`                                                               |  |
+|   `$4` |    `TABLE` | `any_version`                                                     | `boolean`                                                            |  |
+
+Function return type: `TABLE(version_range_op text, version_no text, any_version boolean)`
+
+Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`, ROWS 1000
+
 #### Function: `min (semver)`
 
 Function arguments:
@@ -102,6 +145,26 @@ Function arguments:
 Function return type: `semver`
 
 Function attributes: `IMMUTABLE`, COST 1
+
+#### Function: `nonsemver_cmp (text, text, text)`
+
+When we don't know the semantics of two version strings, it's hard to compare them for anything else than equality.  But, in case you do want to do that, there's this function.
+
+The first two function arguments are the versions to compare.  The third
+argument must be an unequality operator (`'='` or `'=='`) or an unequality
+operator (`'!='` or `'<>'`).
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `text`                                                               |  |
+|   `$2` |       `IN` |                                                                   | `text`                                                               |  |
+|   `$3` |       `IN` |                                                                   | `text`                                                               |  |
+
+Function return type: `boolean`
+
+Function attributes: `IMMUTABLE`, `LEAKPROOF`, `RETURNS NULL ON NULL INPUT`, `PARALLEL SAFE`
 
 #### Function: `pg_text_semver_meta_pgxn()`
 
@@ -153,6 +216,27 @@ Function arguments:
 |   `$2` |       `IN` |                                                                   | `semver`                                                             |  |
 
 Function return type: `integer`
+
+Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`
+
+#### Function: `semver_cmp (semver, semver, text)`
+
+This function is convenient if you want to compare two versions, and want to dynamically give the comparison operator as a third argument rather than hardcoding the call to a specific comparison operator (function).
+
+Both the SQL notation and non-SQL notation of some operators are supported, to
+be at least flexible enough to, for instance, support testing [version
+range](https://pgxn.org/spec/#Version.Ranges) constraints according to the PGXN
+spec.
+
+Function arguments:
+
+| Arg. # | Arg. mode  | Argument name                                                     | Argument type                                                        | Default expression  |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
+|   `$1` |       `IN` |                                                                   | `semver`                                                             |  |
+|   `$2` |       `IN` |                                                                   | `semver`                                                             |  |
+|   `$3` |       `IN` |                                                                   | `text`                                                               |  |
+
+Function return type: `boolean`
 
 Function attributes: `IMMUTABLE`, `LEAKPROOF`, `PARALLEL SAFE`
 
@@ -638,6 +722,42 @@ begin
     end;
 
     perform null::semver;
+
+    -- There are some circumstances (like when parsing PGXN Version Ranges) where you may want to specify the
+    -- operator dynamically rather that hardcode it in an expression; meet `semver_cmp(semver, semver, text)`:
+    assert semver_cmp('0.4.1', '0.4.2', '<');
+    assert semver_cmp('0.4.1', '0.4.2', '<=');
+    assert semver_cmp('0.4.2', '0.4.2', '<=');
+    assert semver_cmp('0.4.2', '0.4.2', '==');
+    assert semver_cmp('0.4.2', '0.4.2', '=');
+    assert semver_cmp('0.4.2', '0.4.2', '>=');
+    assert semver_cmp('0.4.3', '0.4.2', '>=');
+    assert semver_cmp('0.4.3', '0.4.2', '>');
+    assert semver_cmp('0.4.3', '0.4.2', '<>');
+    assert semver_cmp('0.4.2', '0.4.3', '<>');
+    assert semver_cmp('0.4.3', '0.4.2', '!=');
+    assert semver_cmp('0.4.2', '0.4.3', '!=');
+
+    -- Speaking of PGXN `META.json` Version Ranges, you might want some help parsing them:
+    assert (select array_agg(r.*) from meta_pgxn_version_range('1.9.8') r)
+        = array[row('>='::text, '1.9.8'::text, false)];
+    assert (select array_agg(r.*) from meta_pgxn_version_range('0') r)
+        = array[row(null::text, null::text, true)];
+    assert (select array_agg(r.*) from meta_pgxn_version_range('> 1.8.0, != 1.8.4-alpha, < 2.0.0') r)
+        = array[
+            row('>'::text,   '1.8.0'::text,       false)
+            ,row('!='::text, '1.8.4-alpha'::text, false)
+            ,row('<'::text,  '2.0.0'::text,       false)
+        ];
+
+    -- You can even check a PGXN `META.json` Version Ranges specification directly against a given version:
+    assert meta_pgxn_version_range_cmp('6.7.200-alpha-2+build.3', '0');
+    assert meta_pgxn_version_range_cmp('not-a-semver', '>= 1.0.0') is null;
+    assert meta_pgxn_version_range_cmp('1.8.4', '> 1.8.0, != 1.8.4-alpha, < 2.0.0');
+    assert not meta_pgxn_version_range_cmp('1.7.0', '> 1.8.0, != 1.8.4-alpha, < 2.0.0');
+    assert not meta_pgxn_version_range_cmp('1.8.0', '> 1.8.0, != 1.8.4-alpha, < 2.0.0');
+    assert not meta_pgxn_version_range_cmp('1.8.4-alpha', '> 1.8.0, != 1.8.4-alpha, < 2.0.0');
+    assert not meta_pgxn_version_range_cmp('2.0.0', '> 1.8.0, != 1.8.4-alpha, < 2.0.0');
 
     raise transaction_rollback;
 exception
